@@ -1,0 +1,29 @@
+.navbar {
+  height: 60px;
+  border-bottom: 1px solid #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #000;
+}
+
+.logoArea {
+  font-size: 30px;
+  font-weight: bolder;
+  margin-right: 180px;
+}
+.linkArea {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+.logoImage {
+  border: 1px solid gray;
+}
+
+
+
+.active {
+  color: blueviolet;
+}
