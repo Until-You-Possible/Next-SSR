@@ -1,13 +1,10 @@
 // `app/dashboard/page.tsx` is the UI for the `/dashboard` URL
 
-
-const renderHTML = () => {
-    setTimeout(() => {
-         <div>234</div>
-    }, 3000)
-}
+import type { NextPage } from "next"
 
 
-export default function Home() {
+const Home: NextPage = () => {
     return <div>Home</div>
 }
+
+export default Home;
