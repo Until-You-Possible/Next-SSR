@@ -1,16 +1,32 @@
 
 'use client'
 import type { NextPage } from "next";
+import  { useState } from "react";
 import { usePathname } from 'next/navigation'
 import styles from "./index.module.scss"
 import { navs } from "./config"
 import Link from "next/link";
-import { Avatar } from "antd";
+import { Avatar, Button } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import Login from "../Login";
 
 const NavBar: NextPage = () => {
 
     const pathname = usePathname()
+
+    const [isShowLogin, setIsShowLogin] = useState(false)
+
+    const handleGotoEditPage = () => {
+
+    }
+
+    const handleLogin = () => {
+        setIsShowLogin(true);
+    }
+
+    const handleCloseLogin = () => {
+        setIsShowLogin(false);
+    }
 
     return (
         <div className={styles.navbar}>
@@ -26,6 +42,15 @@ const NavBar: NextPage = () => {
                     })
                 }
             </section>
+
+            <section className={styles.opeartionArea}>
+                <Button onClick={handleGotoEditPage}>写文章</Button>
+                <Button type="primary" onClick={handleLogin}>登录</Button>
+            </section>
+
+            <Login isShow={isShowLogin}
+                   onClose={handleCloseLogin}></Login>
+
         </div>
     )
 }
