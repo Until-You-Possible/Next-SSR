@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import styles from "./index.module.scss";
 import { useEffect, useState } from "react";
-
+import  request from "../../service/fetch"
 interface IProps {
     phoneNumber: string;
 }
@@ -31,8 +31,16 @@ const CountDown: NextPage<IProps> = ({ phoneNumber }) => {
     const sendPhoneCode = () => {
         if (phoneNumber === "") {
             alert("输入手机号码～")
+            return;
         }
+        // 发送短信验证码-->回调成功再倒计时
         console.log("phoneNumber", phoneNumber);
+        request.post("/api/user/sendVerifyCode", {
+            to: phoneNumber,
+            templateId: 1
+        }).then(res => {
+            console.log("res", res);
+        })
         // startCountdown();
     };
 
