@@ -2,42 +2,52 @@ import { NextPage } from "next";
 import styles from "./index.module.scss";
 import { useEffect, useState } from "react";
 
-const CountDown: NextPage = () => {
+interface IProps {
+    phoneNumber: string;
+}
 
+const CountDown: NextPage<IProps> = ({ phoneNumber }) => {
     const [initCount, setInitCount] = useState(60);
-
-    let timer: NodeJS.Timeout | null = null;
+    const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
     const startCountdown = () => {
         if (initCount <= 0) {
             setInitCount(60);
         }
 
-        timer = setInterval(() => {
+        const newTimer = setInterval(() => {
             setInitCount((prevCount) => {
                 if (prevCount <= 1) {
-                    timer && clearInterval(timer);
+                    clearInterval(newTimer);
                     return 0; // 计时结束
                 }
                 return prevCount - 1;
             });
-        }, 1000) as NodeJS.Timeout;
+        }, 1000);
+
+        setTimer(newTimer);
     };
 
     const sendPhoneCode = () => {
-        startCountdown();
+        if (phoneNumber === "") {
+            alert("输入手机号码～")
+        }
+        console.log("phoneNumber", phoneNumber);
+        // startCountdown();
     };
 
     useEffect(() => {
         return () => {
             // 在组件卸载时清除定时器
-            timer && clearInterval(timer);
+            if (timer) {
+                clearInterval(timer);
+            }
         };
-    }, []);
+    }, [timer]);
 
     return (
         <div className={styles.phoneCode} onClick={sendPhoneCode}>
-            { ( initCount === 60 ||  initCount === 0 ) ? "发送验证码" : initCount + "s"}
+            {(initCount === 60 || initCount === 0) ? "发送验证码" : initCount + "s"}
         </div>
     );
 };

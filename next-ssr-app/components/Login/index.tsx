@@ -3,6 +3,7 @@ import { Button, Form, Input, Modal } from "antd";
 import styles from "./index.module.scss"
 import Link from "next/link";
 import CountDown from "../CountDown";
+import {useState} from "react";
 
 
 interface IProps {
@@ -10,17 +11,34 @@ interface IProps {
     onClose:  () => void;
 }
 
+interface FormValueType {
+    phone : string,
+    code  : string
+}
+
 const Login: NextPage<IProps> = (props) => {
 
-    const { isShow } = props;
+    const { isShow, onClose } = props;
 
     const handleCancel = () => {
-        props.onClose()
+        onClose && onClose()
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = (values: FormValueType) => {
         console.log('Received values of form: ', values);
+        setPhoneNumber(values?.phone);
+
     };
+
+    const [phoneNumber, setPhoneNumber]  = useState("");
+
+    const [form] = Form.useForm();
+
+    const currentPhoneNumber = Form.useWatch('phone', form);
+
+    // setPhoneNumber(Form.useWatch('phone', form));
+
+    const verifyCode = useState("");
 
     return <>
         {
@@ -34,6 +52,7 @@ const Login: NextPage<IProps> = (props) => {
                 >
                     <Form
                         name="normal_login"
+                        form={form}
                         className={styles.loginForm}
                         onFinish={onFinish}
                     >
@@ -50,12 +69,16 @@ const Login: NextPage<IProps> = (props) => {
                             <Input
                                 size="large"
                                 placeholder="请输入手机验证码"
-                                addonAfter={<CountDown />}
+                                addonAfter={<CountDown phoneNumber={currentPhoneNumber} />}
                             />
 
                         </Form.Item>
+                        <Form.Item>
+                            <Button block size="large" type="primary" htmlType="submit">
+                                登录
+                            </Button>
+                        </Form.Item>
                     </Form>
-                    <Button size="large" block  type="primary">登录</Button>
                     <Link href="#" className={styles.githubButton}>使用Github登录</Link>
                 </Modal>
             </div> : null
