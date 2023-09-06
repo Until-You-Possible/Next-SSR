@@ -36,12 +36,17 @@ const CountDown: NextPage<IProps> = ({ phoneNumber }) => {
         // 发送短信验证码-->回调成功再倒计时
         console.log("phoneNumber", phoneNumber);
         request.post("/api/user/sendVerifyCode", {
-            to: phoneNumber,
+            to: "15026405271",
             templateId: 1
         }).then(res => {
-            console.log("res", res);
-        })
-        // startCountdown();
+          if (res.result) {
+            const currentStatus = res.result.statusCode
+            if (currentStatus === "000000") {
+              alert("短信验证码发送成功");
+              startCountdown();
+            }
+          }
+        });
     };
 
     useEffect(() => {

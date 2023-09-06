@@ -11,7 +11,6 @@ requestInstance.interceptors.request.use(
     (error) => Promise.reject(error));
 
 requestInstance.interceptors.response.use((response) => {
-    console.log("response123456", response)
     if (response.status === 200) {
         return response.data;
     } else {
