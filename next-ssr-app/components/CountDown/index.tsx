@@ -29,23 +29,21 @@ const CountDown: NextPage<IProps> = ({ phoneNumber }) => {
     };
 
     const sendPhoneCode = () => {
-        if (phoneNumber === "") {
+        if (!phoneNumber) {
             alert("输入手机号码～")
             return;
         }
         // 发送短信验证码-->回调成功再倒计时
         console.log("phoneNumber", phoneNumber);
         request.post("/api/user/sendVerifyCode", {
-            to: "15026405271",
+            to: phoneNumber ,
             templateId: 1
         }).then(res => {
-          if (res.result) {
             const currentStatus = res.result.statusCode
             if (currentStatus === "000000") {
               alert("短信验证码发送成功");
               startCountdown();
             }
-          }
         });
     };
 

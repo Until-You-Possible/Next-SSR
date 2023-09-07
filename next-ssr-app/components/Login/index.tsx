@@ -4,6 +4,7 @@ import styles from "./index.module.scss"
 import Link from "next/link";
 import CountDown from "../CountDown";
 import {useState} from "react";
+import requestInstance from "../../service/fetch";
 
 
 interface IProps {
@@ -27,8 +28,15 @@ const Login: NextPage<IProps> = (props) => {
     const onFinish = (values: FormValueType) => {
         console.log('Received values of form: ', values);
         setPhoneNumber(values?.phone);
-
+        userLogin(values);
     };
+
+    const userLogin = (params: FormValueType) => {
+        let url = "/api/user/login"
+        requestInstance.post(url, params).then(res => {
+            console.log("res", res);
+        });
+    }
 
     const [phoneNumber, setPhoneNumber]  = useState("");
 
@@ -38,7 +46,7 @@ const Login: NextPage<IProps> = (props) => {
 
     // setPhoneNumber(Form.useWatch('phone', form));
 
-    const verifyCode = useState("");
+    const smsCode = useState("");
 
     return <>
         {
@@ -63,7 +71,7 @@ const Login: NextPage<IProps> = (props) => {
                             <Input size="large" placeholder="请输入手机号" />
                         </Form.Item>
                         <Form.Item
-                            name="code"
+                            name="smsCode"
                             rules={[{ required: true, message: '请输入验证码' }]}
                         >
                             <Input

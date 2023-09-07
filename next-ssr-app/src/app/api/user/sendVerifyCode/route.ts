@@ -3,6 +3,9 @@ import md5 from "md5";
 import { NextRequest, NextResponse} from 'next/server'
 import { encode } from "js-base64";
 import requestInstance from "../../../../../service/fetch";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/route";
+import {setValueWithExpiration} from "@/lib/memroryStore";
 
 const config = {
     AccountId  : "2c94811c8a27cf2d018a574115151085",
@@ -12,7 +15,7 @@ const config = {
     baseURL    : "https://app.cloopen.com:8883"
 };
 
-export async function POST(request: NextRequest) {
+export  async function POST(request: NextRequest) {
     const requestBody = await request.json();
     const { to, templateId, } = requestBody;
     const CurrentStampTime = format(new Date(), "yyyyMMddHHmmss");
@@ -20,6 +23,8 @@ export async function POST(request: NextRequest) {
     const Authorization    = encode(`${config.AccountId}:${CurrentStampTime}`);
     const url = `${config.baseURL}/2013-12-26/Accounts/${config.AccountId}/SMS/TemplateSMS?sig=${SigParameter}`;
     const verifyCode     = Math.floor(Math.random() * (9999 - 1000)) + 1000;
+
+    setValueWithExpiration(to, verifyCode, 5);
 
     const result = await requestInstance.post(url, {
         to,
