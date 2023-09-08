@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSession } from "@/lib/session";
 
-import { getValue } from "@/lib/memroryStore";
 
-export async function POST(request: NextRequest) {
-  const { phone } = request.body;
-  const phoneSMSCodeMessage  = getValue(phone);
-  return NextResponse.json({ "result": phoneSMSCodeMessage });
+export async function POST(request: NextRequest, response: NextResponse) {
+  const getSessionValue = await getSession(request, response);
+  return NextResponse.json({ "ok": getSessionValue })
 }
